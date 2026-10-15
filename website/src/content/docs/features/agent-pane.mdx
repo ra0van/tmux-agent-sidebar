@@ -49,8 +49,21 @@ When multiple signals compete on the same pane, the sidebar resolves them in thi
 - **waiting** covers everything else the agent has chosen to surface.
 - **idle** is the fallback when nothing else applies.
 
-### Permission badge
+### Identity and mode
 
+The first row always follows `agent · chat name · mode`, for example:
+
+```text
+● pi · Tmux sidebar chat names · default
+● claude · Fix retry handling · plan
+```
+
+The chat-name segment is omitted for unnamed sessions, but the agent and mode
+remain visible. This keeps identity stable while names are discovered or changed.
+
+Mode values are:
+
+- `default` — standard agent mode (also used when an agent exposes no permission mode)
 - `plan` — plan mode
 - `edit` — auto-edit
 - `auto` — auto-accept
@@ -60,7 +73,8 @@ When multiple signals compete on the same pane, the sidebar resolves them in thi
 
 ### Session name
 
-Defaults to the agent name. Can be changed through Claude Code's `/rename`.
+Shown alongside—not instead of—the agent name. It updates from `/rename` in
+Claude Code and pi; unnamed sessions omit this segment.
 
 ### `+` marker
 

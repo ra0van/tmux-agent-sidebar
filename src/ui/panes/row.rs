@@ -174,7 +174,7 @@ mod tests {
         );
 
         let status = line_text(&lines[0]);
-        assert!(status.contains(" codex auto"));
+        assert!(status.contains(" codex · auto"));
     }
 
     #[test]
@@ -197,13 +197,13 @@ mod tests {
 
         let status = line_text(&lines[0]);
         assert!(
-            status.contains(" codex defer"),
+            status.contains(" codex · defer"),
             "defer permission mode should render its badge, got: {status}"
         );
     }
 
     #[test]
-    fn render_pane_lines_shows_session_name_instead_of_agent() {
+    fn render_pane_lines_shows_agent_session_name_and_mode() {
         let theme = ColorTheme::default();
         let mut p = pane(PermissionMode::Default, PaneStatus::Running, "");
         p.session_name = "fix-csv-aliases".into();
@@ -223,13 +223,43 @@ mod tests {
 
         let status = line_text(&lines[0]);
         assert!(
-            status.contains("fix-csv-aliases"),
-            "session name should appear in status row, got: {status}"
+            status.contains("codex · fix-csv-aliases · default"),
+            "agent, session name, and mode should appear in order, got: {status}"
         );
-        assert!(
-            !status.contains("codex"),
-            "agent label should be replaced by session name, got: {status}"
+    }
+
+    #[test]
+    fn render_pi_row_orders_agent_name_mode_branch_and_chat_text() {
+        let theme = ColorTheme::default();
+        let mut p = pane(
+            PermissionMode::Default,
+            PaneStatus::Running,
+            "working on tests",
         );
+        p.agent = AgentType::Pi;
+        p.session_name = "sidebar fixes".into();
+        let lines = render_pane_lines_with_ports(
+            &p,
+            &PaneGitInfo {
+                repo_root: Some("/tmp/project".into()),
+                branch: Some("feature/ui".into()),
+                is_worktree: false,
+                worktree_name: None,
+            },
+            None,
+            None,
+            false,
+            false,
+            50,
+            &StatusIcons::default(),
+            &theme,
+            0,
+            0,
+        );
+
+        assert!(line_text(&lines[0]).contains("pi · sidebar fixes · default"));
+        assert!(line_text(&lines[1]).contains("feature/ui"));
+        assert!(line_text(&lines[2]).contains("working on tests"));
     }
 
     #[test]
@@ -554,7 +584,7 @@ mod tests {
 
         assert!(lines.len() >= 2);
         let status = line_text(&lines[0]);
-        assert!(status.contains(" codex !"));
+        assert!(status.contains(" codex · !"));
         assert!(!line_text(&lines[1]).contains("Waiting for prompt"));
     }
 
@@ -1134,16 +1164,15 @@ mod tests {
     }
 
     #[test]
-    fn status_row_default_permission_mode_omits_badge() {
+    fn status_row_default_permission_mode_is_explicit() {
         let theme = ColorTheme::default();
         let ctx = test_ctx(&theme, 40, false);
         let pane = pane(PermissionMode::Default, PaneStatus::Running, "");
         let line = status_row(&pane, &ctx, &StatusIcons::default(), 0, 0);
         let text = line_text(&line);
-        // Default mode has an empty badge string — no extra badge token should appear.
         assert!(
-            !text.contains(" auto") && !text.contains(" plan") && !text.contains(" !"),
-            "default permission mode should not render a badge, got: {text}"
+            text.contains("codex · default"),
+            "default permission mode should be explicit, got: {text}"
         );
     }
 

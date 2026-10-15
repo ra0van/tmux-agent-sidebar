@@ -159,10 +159,12 @@ impl AppState {
         } else {
             self.apply_session_snapshot(focused, sessions);
         }
-        if self.sessions.dirty {
-            self.refresh_session_names();
-            self.sessions.dirty = false;
-        }
+        // Pane snapshots are rebuilt from tmux every tick. Reapply cached
+        // Claude names every time so they cannot disappear between the
+        // slower session-file polling updates. Hook-provided names for pi
+        // and other agents are preserved by refresh_session_names().
+        self.refresh_session_names();
+        self.sessions.dirty = false;
         self.refresh_activity_data();
         window_active
     }

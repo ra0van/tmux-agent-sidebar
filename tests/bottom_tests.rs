@@ -616,11 +616,11 @@ fn snapshot_git_more_than_5_files() {
 
     // Verify file list rendering (scroll to see overflow)
     let plain = render_to_string(&mut state, 28, 40);
-    insta::assert_snapshot!(plain, @r"
+    insta::assert_snapshot!(plain, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │main                      │
     │                   7 files│
@@ -643,11 +643,11 @@ fn snapshot_git_more_than_5_files() {
     // when the file list shrinks between frames.
     state.scrolls.git.offset = 5;
     let scrolled = render_to_string(&mut state, 28, 40);
-    insta::assert_snapshot!(scrolled, @r"
+    insta::assert_snapshot!(scrolled, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │main                      │
     │                   7 files│
@@ -814,11 +814,11 @@ fn snapshot_subagents_tree_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 40, 28);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                                    — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
         ├ Explore #1
         ├ Plan #2
         └ Explore #2
@@ -851,11 +851,11 @@ fn snapshot_subagent_long_name_truncated_ui() {
 
     // Narrow width (28) to force truncation of long subagent names
     let output = render_to_string(&mut state, 28, 27);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
         ├ superpowers:code-revi…
         └ claude-code-guide #2
     ╭ Activity │ Git ──────────╮
@@ -887,11 +887,11 @@ fn snapshot_activity_empty_centered_ui() {
     // No activity entries — should show centered "No activity yet"
 
     let output = render_to_string(&mut state, 28, 26);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -918,11 +918,11 @@ fn snapshot_git_clean_centered_ui() {
     // No git info — should show centered "Working tree clean"
 
     let output = render_to_string(&mut state, 28, 26);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │    Working tree clean    │
@@ -1171,11 +1171,11 @@ fn snapshot_branch_truncated_ui() {
     state.rebuild_row_targets();
 
     let plain = render_to_string(&mut state, 28, 30);
-    insta::assert_snapshot!(plain, @r"
+    insta::assert_snapshot!(plain, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     dotfiles                   +
-    ┃ ● claude
+    ┃ ● claude · default
     ┃   feature/tmux-sidebar-da…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1231,11 +1231,11 @@ fn snapshot_git_staged_unstaged_untracked_ui() {
     state.git.untracked_files = vec!["debug.log".into()];
 
     let output = render_to_string(&mut state, 28, 30);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │main                    #5│
     │+12/-3             4 files│
@@ -1372,11 +1372,11 @@ fn snapshot_git_many_files_more_indicator_ui() {
         .collect();
 
     let output = render_to_string(&mut state, 28, 30);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │dev                       │
     │                   7 files│
@@ -1425,11 +1425,11 @@ fn snapshot_git_more_than_10_files_ui() {
         .collect();
 
     let output = render_to_string(&mut state, 28, 30);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │dev                       │
     │                  12 files│
@@ -1492,14 +1492,14 @@ fn snapshot_focused_group_active_border_styled() {
 
     // Styled snapshot locks in the focused group's accent color (fg:153) on
     // the active pane marker and the active bottom-panel border.
-    insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 30), @r"
+    insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 30), @"
      ≡[fg:111]2[fg:255]  ●[fg:245]1[fg:255]  ◎[fg:245]0[fg:245]  ◐[fg:245]0[fg:245]  ○[fg:245]1[fg:255]  ✕[fg:245]0[fg:245]
     ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
     d[fg:153]o[fg:153]t[fg:153]f[fg:153]i[fg:153]l[fg:153]e[fg:153]s[fg:153]
-    ┃[fg:153,bg:239] [bg:239]●[fg:82,bg:239] [fg:174,bg:239]c[fg:174,bg:239]l[fg:174,bg:239]a[fg:174,bg:239]u[fg:174,bg:239]d[fg:174,bg:239]e[fg:174,bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239]
+    ┃[fg:153,bg:239] [bg:239]●[fg:82,bg:239] [fg:174,bg:239]c[fg:174,bg:239]l[fg:174,bg:239]a[fg:174,bg:239]u[fg:174,bg:239]d[fg:174,bg:239]e[fg:174,bg:239] [fg:252,bg:239]·[fg:252,bg:239] [fg:252,bg:239]d[fg:252,bg:239]e[fg:252,bg:239]f[fg:252,bg:239]a[fg:252,bg:239]u[fg:252,bg:239]l[fg:252,bg:239]t[fg:252,bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239]
 
     m[fg:255]y[fg:255]-[fg:255]a[fg:255]p[fg:255]p[fg:255]
-      ○[fg:110] [fg:141]c[fg:141]o[fg:141]d[fg:141]e[fg:141]x[fg:141]
+      ○[fg:110] [fg:141]c[fg:141]o[fg:141]d[fg:141]e[fg:141]x[fg:141] [fg:252]·[fg:252] [fg:252]d[fg:252]e[fg:252]f[fg:252]a[fg:252]u[fg:252]l[fg:252]t[fg:252]
        [fg:244] [fg:244]W[fg:244]a[fg:244]i[fg:244]t[fg:244]i[fg:244]n[fg:244]g[fg:244] [fg:244]f[fg:244]o[fg:244]r[fg:244] [fg:244]p[fg:244]r[fg:244]o[fg:244]m[fg:244]p[fg:244]t[fg:244]…[fg:244]
 
 
@@ -1544,11 +1544,11 @@ fn test_pet_enabled_preserves_bottom_panel_border() {
     state.focus_state.sidebar_focused = false;
     state.pet_enabled = true;
 
-    insta::assert_snapshot!(render_to_string(&mut state, 40, 30), @r"
+    insta::assert_snapshot!(render_to_string(&mut state, 40, 30), @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                                    — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
       ▄ ▄
      ▄▀▀▀▄                             ████

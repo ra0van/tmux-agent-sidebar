@@ -28,10 +28,10 @@ fn snapshot_single_agent_idle_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -62,10 +62,10 @@ fn snapshot_secondary_header_without_notices() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
                              — ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -92,10 +92,10 @@ fn snapshot_secondary_header_long_repo_filter_truncated() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ  very-long-repository-n… ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -125,11 +125,11 @@ fn snapshot_version_banner_does_not_duplicate_in_scroll_area() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 10);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ");
 }
@@ -153,11 +153,11 @@ fn snapshot_single_agent_running_with_elapsed() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     dotfiles
-    ┃ ● claude              2m5s
+    ┃ ● claude · default    2m5s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -184,11 +184,11 @@ fn snapshot_long_session_name_truncated_keeps_elapsed_visible() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     dotfiles
-    ┃ ● this-is-a-ridiculo… 2m5s
+    ┃ ● claude · default    2m5s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -213,11 +213,11 @@ fn running_spinner_different_frame() {
     state.spinner_frame = 0;
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -243,10 +243,10 @@ fn snapshot_agent_with_prompt_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         fix the bug
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -273,10 +273,10 @@ fn snapshot_agent_with_japanese_prompt_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 27);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
         こ れ っ て 今 1時 間 経 っ て い
         る け ど 、 起 動 し て 確 認 し て
         も 問 題 な い ？
@@ -345,10 +345,10 @@ fn snapshot_two_agents_same_window_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
         fix the bug
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -391,11 +391,11 @@ fn snapshot_two_windows_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     project-a
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -440,11 +440,11 @@ fn snapshot_multi_session_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     dotfiles
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -470,10 +470,10 @@ fn snapshot_wait_reason_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐1  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ◐ claude
+    ┃ ◐ claude · default
         permission required
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -500,10 +500,10 @@ fn snapshot_auto_rename_window_title_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -546,11 +546,11 @@ fn snapshot_activity_log_ui() {
     ];
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │10:32                 Edit│
     │  src/main.rs             │
@@ -585,11 +585,11 @@ fn snapshot_activity_log_long_label_ui() {
     }];
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │10:32                 Read│
     │  config/tmux-agent-sideba│
@@ -620,10 +620,10 @@ fn snapshot_prompt_wrapping_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 27);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
-    ┃ ○ claude
+    ┃ ○ claude · default
         Please fix the
         authentication bug in
         the login flow that cau…
@@ -651,11 +651,11 @@ fn snapshot_selected_unfocused_ui() {
     state.focus_state.sidebar_focused = false;
 
     let output = render_to_string(&mut state, 28, 26);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                        — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -682,10 +682,10 @@ fn snapshot_error_state_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○0  ✕1
     ⓘ                        — ▾
-    ┃ ✕ claude
+    ┃ ✕ claude · default
         something broke
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -712,10 +712,10 @@ fn snapshot_narrow_width_ui() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 18, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○
     ⓘ              — ▾
-    ┃ ○ claude
+    ┃ ○ claude · defau
         hello world
     ╭ Activity │ Git ╮
     │ No activity yet│
@@ -762,10 +762,10 @@ fn snapshot_worktree_branch_ui() {
     }]);
 
     let output = render_to_string(&mut state, 28, 26);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
     ┃   + feature/sidebar
         fix bug
     ╭ Activity │ Git ──────────╮
@@ -873,10 +873,10 @@ fn snapshot_task_progress_all_completed_ui() {
     );
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
         ✔✔ 2/2
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -900,10 +900,10 @@ fn snapshot_task_progress_all_pending_ui() {
     );
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
         ◻◻◻ 0/3
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -944,11 +944,11 @@ fn snapshot_all_elements_combined_ui() {
     );
 
     let output = render_to_string(&mut state, 30, 32);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐1  ○0  ✕0
     ⓘ                          — ▾
     project                      +
-    ┃ ◐ claude auto
+    ┃ ◐ claude · auto
     ┃   main
         ✔◼ 1/2
         ├ Explore #1
@@ -971,11 +971,11 @@ fn snapshot_response_japanese_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 30, 27);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     project
-    ┃ ○ claude
+    ┃ ○ claude · default
       ▷ 修 正 が 完 了 し ま し た 。 テ ス ト
         も 全 て 通 っ て い ま す 。
     ╭ Activity │ Git ────────────╮
@@ -1006,16 +1006,16 @@ fn snapshot_three_groups_middle_focused_ui() {
     state.focus_state.focused_pane_id = Some("%2".into());
 
     let output = render_to_string(&mut state, 28, 33);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡3  ●1  ◎0  ◐0  ○2  ✕0
     ⓘ                        — ▾
     repo-a
-      ● claude
+      ● claude · default
     repo-b
-    ┃ ○ codex
+    ┃ ○ codex · default
         Waiting for prompt…
     repo-c
-      ○ claude
+      ○ claude · default
         Waiting for prompt…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1033,11 +1033,11 @@ fn snapshot_bypass_all_badge_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude !
+    ┃ ● claude · !
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1052,11 +1052,11 @@ fn snapshot_full_auto_badge_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude auto
+    ┃ ● claude · auto
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1071,11 +1071,11 @@ fn snapshot_plan_badge_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude plan
+    ┃ ● claude · plan
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1090,11 +1090,11 @@ fn snapshot_accept_edits_badge_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude edit
+    ┃ ● claude · edit
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1119,11 +1119,11 @@ fn snapshot_response_with_branch_ui() {
     }]);
 
     let output = render_to_string(&mut state, 34, 27);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                              — ▾
     project                          +
-    ┃ ○ claude
+    ┃ ○ claude · default
     ┃   feature/ui-v2
       ▷ Done. All tests are green.
     ╭ Activity │ Git ────────────────╮
@@ -1142,10 +1142,10 @@ fn snapshot_wait_reason_elicitation_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐1  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ◐ claude
+    ┃ ◐ claude · default
         waiting for selection
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1161,10 +1161,10 @@ fn snapshot_wait_reason_unknown_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐1  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ◐ claude
+    ┃ ◐ claude · default
         some_future_reason
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1182,10 +1182,10 @@ fn snapshot_wait_reason_permission_denied_ui() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane])]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐1  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ◐ claude
+    ┃ ◐ claude · default
         permission denied
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1211,10 +1211,10 @@ fn snapshot_worktree_with_name_ui() {
     }]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
     ┃   + auth-wt: feat/auth
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1238,10 +1238,10 @@ fn snapshot_worktree_name_same_as_branch_ui() {
     }]);
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ● claude
+    ┃ ● claude · default
     ┃   + feat/auth
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
@@ -1295,11 +1295,11 @@ fn snapshot_activity_all_tool_types_ui() {
     ];
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │10:07                Agent│
     │  Explore codebase        │
@@ -1334,11 +1334,11 @@ fn snapshot_focus_activity_log_ui() {
     }];
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ──────────╮
     │10:00                 Read│
     │  file.rs                 │
@@ -1360,10 +1360,10 @@ fn right_border_narrow_width_with_badge() {
     // Snapshot locks in the `!` badge visibility at narrow width plus a
     // fully-drawn right border.
     let output = render_to_string(&mut state, 22, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕
     ⓘ                  — ▾
-    ┃ ● claude !    2h0m0s
+    ┃ ● claude · !  2h0m0s
         fix the issue
     ╭ Activity │ Git ────╮
     │   No activity yet  │
@@ -1408,12 +1408,12 @@ fn right_border_all_permission_modes_and_agents() {
             composite.push_str("\n\n");
         }
     }
-    insta::assert_snapshot!(composite, @r"
+    insta::assert_snapshot!(composite, @"
     === Claude / Default ===
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude          1h30m32s
+    ┃ ● claude · default1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1422,7 +1422,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude auto     1h30m32s
+    ┃ ● claude · auto   1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1431,7 +1431,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude dontAsk  1h30m32s
+    ┃ ● claude · dontAsk1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1440,7 +1440,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude plan     1h30m32s
+    ┃ ● claude · plan   1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1449,7 +1449,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude edit     1h30m32s
+    ┃ ● claude · edit   1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1458,7 +1458,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● claude !        1h30m32s
+    ┃ ● claude · !      1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1467,7 +1467,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex           1h30m32s
+    ┃ ● codex · default 1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1476,7 +1476,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex auto      1h30m32s
+    ┃ ● codex · auto    1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1485,7 +1485,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex dontAsk   1h30m32s
+    ┃ ● codex · dontAsk 1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1494,7 +1494,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex plan      1h30m32s
+    ┃ ● codex · plan    1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1503,7 +1503,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex edit      1h30m32s
+    ┃ ● codex · edit    1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1512,7 +1512,7 @@ fn right_border_all_permission_modes_and_agents() {
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                        — ▾
     project
-    ┃ ● codex !         1h30m32s
+    ┃ ● codex · !       1h30m32s
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
     ╰──────────────────────────╯
@@ -1534,11 +1534,11 @@ fn snapshot_filter_bar_shows_counts() {
 
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
     ╰────────────────────────────╯
@@ -1559,11 +1559,11 @@ fn snapshot_filter_running_hides_idle() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     state.global.status_filter = StatusFilter::Running;
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     project
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
     ╰────────────────────────────╯
@@ -1584,10 +1584,10 @@ fn snapshot_filter_idle_hides_running() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     state.global.status_filter = StatusFilter::Idle;
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
-      ○ codex
+      ○ codex · default
         Waiting for prompt…
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
@@ -1612,11 +1612,11 @@ fn snapshot_filter_hides_empty_groups() {
     ]);
     state.global.status_filter = StatusFilter::Running;
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     repo-a
-    ┃ ● claude
+    ┃ ● claude · default
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
     ╰────────────────────────────╯
@@ -1637,12 +1637,12 @@ fn snapshot_filter_all_shows_everything() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     state.global.status_filter = StatusFilter::All;
     let output = render_to_string(&mut state, 30, 30);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     project
-    ┃ ● claude
-      ○ codex
+    ┃ ● claude · default
+      ○ codex · default
         Waiting for prompt…
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
@@ -1725,10 +1725,10 @@ fn snapshot_filter_error_shows_agents() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     state.global.status_filter = StatusFilter::Error;
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●1  ◎0  ◐0  ○0  ✕1
     ⓘ                          — ▾
-    ┃ ✕ claude
+    ┃ ✕ claude · default
         something broke
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
@@ -1751,10 +1751,10 @@ fn snapshot_filter_waiting_shows_only_waiting() {
     let mut state = make_state_with_groups(vec![make_repo_group("project", vec![pane1, pane2])]);
     state.global.status_filter = StatusFilter::Waiting;
     let output = render_to_string(&mut state, 30, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●0  ◎0  ◐1  ○1  ✕0
     ⓘ                          — ▾
-    ┃ ◐ claude
+    ┃ ◐ claude · default
         permission required
     ╭ Activity │ Git ────────────╮
     │       No activity yet      │
@@ -1798,11 +1798,11 @@ fn snapshot_repo_header_shows_spawn_plus_button() {
     let pane = make_pane(AgentType::Claude, PaneStatus::Idle);
     let mut state = make_state_for_popup_tests(vec![repo_group_with_root("proj", vec![pane])]);
     let output = render_to_string(&mut state, 30, 15);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     proj                         +
-    ┃ ○ claude
+    ┃ ○ claude · default
     ┃   main
         Waiting for prompt…
     ╭ Activity │ Git ────────────╮
@@ -2027,14 +2027,14 @@ fn snapshot_sidebar_spawned_pane_appends_trailing_remove_marker() {
     let mut state = make_state_with_groups(vec![group]);
     state.bottom_panel_height = 3;
     let output = render_to_string(&mut state, 30, 20);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡2  ●0  ◎0  ◐0  ○2  ✕0
     ⓘ                          — ▾
     proj                         +
-    ┃ ○ claude
+    ┃ ○ claude · default
     ┃   + main
         Waiting for prompt…
-      ○ claude
+      ○ claude · default
         + feat/x                 ×
         Waiting for prompt…
     ╭ Activity │ Git ────────────╮
@@ -2167,11 +2167,11 @@ fn snapshot_sidebar_spawned_long_branch_truncates_and_keeps_x() {
     let mut state = make_state_with_groups(vec![group]);
     state.bottom_panel_height = 3;
     let output = render_to_string(&mut state, 24, 20);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                    — ▾
     proj                   +
-      ○ claude
+      ○ claude · default
         + feature/really-l…×
         Waiting for prompt…
     ╭ Activity │ Git ──────╮
@@ -2210,11 +2210,11 @@ fn snapshot_sidebar_spawned_coexists_with_port_display() {
     state.bottom_panel_height = 3;
     state.pane_state_mut("%9").ports = vec![3000];
     let output = render_to_string(&mut state, 30, 20);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                          — ▾
     proj                         +
-      ○ claude
+      ○ claude · default
         + feat/srv         :3000 ×
         Waiting for prompt…
     ╭ Activity │ Git ────────────╮
@@ -2234,11 +2234,11 @@ fn snapshot_remove_confirm_modal_shows_three_options() {
         area: None,
     };
     let output = render_to_string(&mut state, 50, 18);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎0  ◐0  ○1  ✕0
     ⓘ                                              — ▾
     proj                                             +
-    ┃ ○ claude
+    ┃ ○ claude · default
     ┃   main   ╭ add-login ───────────────╮
         Waiting│[y] remove worktree       │
                │[c] close window only     │
@@ -2341,10 +2341,10 @@ fn snapshot_background_status_shows_bg_command_row() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 32, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎1  ◐0  ○0  ✕0
     ⓘ                            — ▾
-    ┃ ◎ claude
+    ┃ ◎ claude · default
         $ npm run dev
     ╭ Activity │ Git ──────────────╮
     │        No activity yet       │
@@ -2372,10 +2372,10 @@ fn snapshot_running_pane_still_shows_live_bg_command() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 32, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●1  ◎0  ◐0  ○0  ✕0
     ⓘ                            — ▾
-    ┃ ● claude                   10s
+    ┃ ● claude · default         10s
         $ cargo watch
     ╭ Activity │ Git ──────────────╮
     │        No activity yet       │
@@ -2402,10 +2402,10 @@ fn snapshot_background_long_command_truncates_with_ellipsis() {
     state.rebuild_row_targets();
 
     let output = render_to_string(&mut state, 28, 25);
-    insta::assert_snapshot!(output, @r"
+    insta::assert_snapshot!(output, @"
      ≡1  ●0  ◎1  ◐0  ○0  ✕0
     ⓘ                        — ▾
-    ┃ ◎ claude
+    ┃ ◎ claude · default
         $ cargo run --bin very-…
     ╭ Activity │ Git ──────────╮
     │      No activity yet     │
