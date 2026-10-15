@@ -89,6 +89,14 @@ const getSessionId = (ctx) => {
   }
 };
 
+const getSessionName = (ctx) => {
+  try {
+    return ctx?.sessionManager?.getSessionName?.() ?? "";
+  } catch {
+    return "";
+  }
+};
+
 // "resume" and "fork" both continue a prior conversation from the user's
 // point of view; every other session_start reason ("startup", "reload",
 // "new") is treated as a fresh session.
@@ -121,6 +129,11 @@ export default function (pi) {
       session_id: getSessionId(ctx),
       source: mapSource(event.reason),
     });
+    hook("session-info-changed", { name: getSessionName(ctx) });
+  });
+
+  pi.on("session_info_changed", async (event) => {
+    hook("session-info-changed", { name: event.name ?? "" });
   });
 
   pi.on("session_shutdown", async (event, ctx) => {

@@ -84,6 +84,9 @@ impl EventAdapter for PiAdapter {
             "session-end" => Some(AgentEvent::SessionEnd {
                 end_reason: json_str(input, "end_reason").into(),
             }),
+            "session-info-changed" => Some(AgentEvent::SessionInfoChanged {
+                name: json_str(input, "name").into(),
+            }),
             "user-prompt-submit" => Some(AgentEvent::UserPromptSubmit {
                 agent: PI_AGENT.into(),
                 cwd: json_str(input, "cwd").into(),
@@ -160,6 +163,27 @@ mod tests {
             event,
             AgentEvent::SessionEnd {
                 end_reason: "quit".into()
+            }
+        );
+    }
+
+    #[test]
+    fn session_info_changed() {
+        let adapter = PiAdapter;
+        assert_eq!(
+            adapter
+                .parse("session-info-changed", &json!({"name": "Sidebar names"}))
+                .unwrap(),
+            AgentEvent::SessionInfoChanged {
+                name: "Sidebar names".into()
+            }
+        );
+        assert_eq!(
+            adapter
+                .parse("session-info-changed", &json!({"name": null}))
+                .unwrap(),
+            AgentEvent::SessionInfoChanged {
+                name: String::new()
             }
         );
     }

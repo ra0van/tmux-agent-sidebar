@@ -6,6 +6,7 @@
 pub enum AgentEventKind {
     SessionStart,
     SessionEnd,
+    SessionInfoChanged,
     UserPromptSubmit,
     Notification,
     Stop,
@@ -29,6 +30,7 @@ impl AgentEventKind {
     pub const ALL: &'static [Self] = &[
         Self::SessionStart,
         Self::SessionEnd,
+        Self::SessionInfoChanged,
         Self::UserPromptSubmit,
         Self::Notification,
         Self::Stop,
@@ -52,6 +54,7 @@ impl AgentEventKind {
         match self {
             Self::SessionStart => "session-start",
             Self::SessionEnd => "session-end",
+            Self::SessionInfoChanged => "session-info-changed",
             Self::UserPromptSubmit => "user-prompt-submit",
             Self::Notification => "notification",
             Self::Stop => "stop",
@@ -90,6 +93,7 @@ mod tests {
             match kind {
                 AgentEventKind::SessionStart
                 | AgentEventKind::SessionEnd
+                | AgentEventKind::SessionInfoChanged
                 | AgentEventKind::UserPromptSubmit
                 | AgentEventKind::Notification
                 | AgentEventKind::Stop
@@ -106,7 +110,7 @@ mod tests {
                 | AgentEventKind::WorktreeRemove => {}
             }
         }
-        assert_eq!(AgentEventKind::ALL.len(), 16);
+        assert_eq!(AgentEventKind::ALL.len(), 17);
     }
 
     #[test]

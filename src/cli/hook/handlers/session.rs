@@ -23,6 +23,7 @@ pub(in crate::cli::hook) fn on_session_start(
     set_notification_run_id(pane);
     tmux::unset_pane_option(pane, tmux::PANE_PROMPT);
     tmux::unset_pane_option(pane, tmux::PANE_PROMPT_SOURCE);
+    tmux::unset_pane_option(pane, tmux::PANE_NAME);
     // `@pane_subagents` is deliberately preserved across SessionStart.
     // Subagents share the parent's `$TMUX_PANE`, so when a subagent
     // fires its own SessionStart after SubagentStart has populated the
@@ -202,6 +203,10 @@ mod tests {
         assert!(
             !tmux::test_mock::contains(pane, tmux::PANE_PROMPT),
             "SessionStart should clear any stale prompt"
+        );
+        assert!(
+            !tmux::test_mock::contains(pane, tmux::PANE_NAME),
+            "SessionStart should clear any stale session name"
         );
     }
 

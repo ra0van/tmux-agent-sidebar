@@ -32,6 +32,9 @@ pub enum AgentEvent {
     SessionEnd {
         end_reason: String,
     },
+    SessionInfoChanged {
+        name: String,
+    },
     UserPromptSubmit {
         agent: String,
         cwd: String,
@@ -127,6 +130,7 @@ impl AgentEvent {
         match self {
             Self::SessionStart { .. } => AgentEventKind::SessionStart,
             Self::SessionEnd { .. } => AgentEventKind::SessionEnd,
+            Self::SessionInfoChanged { .. } => AgentEventKind::SessionInfoChanged,
             Self::UserPromptSubmit { .. } => AgentEventKind::UserPromptSubmit,
             Self::Notification { .. } => AgentEventKind::Notification,
             Self::Stop { .. } => AgentEventKind::Stop,

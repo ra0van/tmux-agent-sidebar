@@ -24,7 +24,7 @@ tmux show -t "$pane_id" -pv @pane_agent
 | `@pane_status`             | `running` / `background` / `waiting` / `idle` / `error` / empty    |
 | `@pane_attention`          | `1` while the pane is flagged for attention, otherwise empty        |
 | `@pane_agent`              | `claude` / `codex` / `opencode` / `pi` / empty                      |
-| `@pane_name`               | Friendly agent/session name (from `/rename` on Claude)              |
+| `@pane_name`               | Friendly agent/session name (from `/rename` on Claude or pi)        |
 | `@pane_role`               | `sidebar` for the sidebar pane itself; empty for agent panes        |
 | `@pane_prompt`             | Latest user prompt text or response preview                         |
 | `@pane_prompt_source`      | `user` when the prompt field holds the user's prompt, `response` when it holds the agent's last reply |

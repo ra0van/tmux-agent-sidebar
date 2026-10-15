@@ -40,6 +40,7 @@ pub(super) mod pane_line_field {
     pub const PANE_STATUS: usize = 1; // absolute 7  (@pane_status)
     pub const PANE_ATTENTION: usize = 2; // absolute 8  (@pane_attention)
     pub const AGENT: usize = 3; // absolute 9  (@pane_agent)
+    pub const PANE_NAME: usize = 4; // absolute 10 (@pane_name)
     pub const PANE_CURRENT_PATH: usize = 5; // absolute 11 (pane_current_path)
     pub const PANE_CURRENT_COMMAND: usize = 6; // absolute 12
     pub const PANE_ROLE: usize = 7; // absolute 13 (@pane_role)
@@ -342,7 +343,7 @@ fn parse_pane_fields_with_processes(
             branch: parts[pane_line_field::WORKTREE_BRANCH].to_string(),
         },
         session_id,
-        session_name: String::new(),
+        session_name: parts[pane_line_field::PANE_NAME].to_string(),
         sidebar_spawned: parts[pane_line_field::SIDEBAR_SPAWNED] == "1",
         bg_shell_cmd: {
             let raw = &parts[pane_line_field::BG_CMD];
@@ -366,6 +367,7 @@ fn parse_pane_fields_with_processes(
 fn clear_agent_pane_state(pane_id: &str) {
     const KEYS: &[&str] = &[
         PANE_AGENT,
+        PANE_NAME,
         PANE_PROMPT,
         PANE_PROMPT_SOURCE,
         PANE_BG_CMD,
@@ -829,6 +831,7 @@ mod tests {
         assert_eq!(pane.pane_pid, Some(12345));
         assert_eq!(pane.subagents, vec!["Explore", "Plan"]);
         assert_eq!(pane.permission_mode, PermissionMode::Auto);
+        assert_eq!(pane.session_name, "my-agent");
     }
 
     #[test]

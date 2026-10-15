@@ -11,6 +11,7 @@ surface is similar to OpenCode but with a different event source.
 ### Status and prompts
 
 - Live status from `session_start` / `before_agent_start` / `agent_settled`
+- Chat name from `session_info_changed`, updated immediately when `/rename` sets or clears it
 - Prompt text from `before_agent_start`
 - Response preview (`▷ ...`) from the last assistant message, flushed on `agent_settled`
 - Elapsed time since the last prompt

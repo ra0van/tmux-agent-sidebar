@@ -4,7 +4,7 @@ use std::time::Duration;
 use crate::activity::{self, TaskProgress};
 use crate::cli::sanitize_tmux_value;
 use crate::process::ProcessSnapshot;
-use crate::tmux::{self, PaneStatus, SessionInfo};
+use crate::tmux::{self, AgentType, PaneStatus, SessionInfo};
 
 use super::AppState;
 
@@ -178,9 +178,14 @@ impl AppState {
                     && let Some(name) = self.sessions.names.get(sid)
                 {
                     pane.session_name.clone_from(name);
-                } else {
+                } else if pane.agent == AgentType::Claude {
+                    // Claude names come from ~/.claude/sessions. Clear labels
+                    // removed by /rename so stale names do not linger.
                     pane.session_name.clear();
                 }
+                // Other agents can supply a name directly through @pane_name.
+                // Preserve that hook-provided value when it is absent from the
+                // Claude-only session-name cache.
             }
         }
     }
@@ -824,9 +829,9 @@ mod tests {
     // refresh_session_names no longer scans the filesystem itself; it
     // only consumes the cached `session_names` map populated by the
     // dedicated polling thread in `main.rs`. These tests pin that
-    // contract: the function must apply the cached snapshot to every
-    // pane and clear stale labels for panes whose session_id is no
-    // longer in the map.
+    // contract: the function applies cached Claude names and clears stale
+    // Claude labels, while preserving names supplied directly by other
+    // agents through @pane_name.
 
     fn pane_with_session(id: &str, session_id: &str) -> PaneInfo {
         let mut p = test_pane(id);
@@ -885,6 +890,21 @@ mod tests {
     }
 
     #[test]
+    fn refresh_session_names_preserves_pi_hook_name() {
+        let mut pane = pane_with_session("%PI", "pi-session");
+        pane.agent = AgentType::Pi;
+        pane.session_name = "Named Pi chat".into();
+        let mut state = state_with_panes(vec![pane]);
+
+        state.refresh_session_names();
+
+        assert_eq!(
+            state.repo_groups[0].panes[0].0.session_name,
+            "Named Pi chat"
+        );
+    }
+
+    #[test]
     fn apply_session_snapshot_marks_dirty_when_existing_pane_swaps_session_id() {
         // Pane %1 keeps the same pane_id across snapshots but its
         // session_id changes (e.g. the agent restarted with a new
@@ -921,10 +941,8 @@ mod tests {
 
     #[test]
     fn refresh_session_names_clears_label_for_pane_with_no_session_id() {
-        // Pane has a session_name set but no session_id (e.g. a
-        // non-Claude agent or a pane that has not reported one yet).
-        // The function must not preserve a label that no longer ties
-        // to a known session.
+        // A Claude pane with no session_id cannot tie its label to a
+        // known ~/.claude/sessions entry, so a stale label is cleared.
         let mut state = state_with_panes(vec![test_pane("%1")]);
         state.repo_groups[0].panes[0].0.session_name = "stray".into();
         state.sessions.names.insert("sess-a".into(), "alpha".into());

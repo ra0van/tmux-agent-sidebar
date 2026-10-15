@@ -58,6 +58,14 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             let notifications = notification_settings();
             handlers::on_session_end(pane, agent_name, &end_reason, &notifications)
         }
+        AgentEvent::SessionInfoChanged { name } => {
+            if name.is_empty() {
+                crate::tmux::unset_pane_option(pane, crate::tmux::PANE_NAME);
+            } else {
+                crate::tmux::set_pane_option(pane, crate::tmux::PANE_NAME, &name);
+            }
+            0
+        }
         AgentEvent::UserPromptSubmit {
             agent,
             cwd,
