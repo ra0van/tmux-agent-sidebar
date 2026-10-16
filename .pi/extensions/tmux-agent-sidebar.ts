@@ -64,21 +64,38 @@ const HOOK_COMMAND = (() => {
     : { cmd: "tmux-agent-sidebar", prefix: ["hook", "pi"] };
 })();
 
-// Fire-and-forget: pi does not await extension event handlers before
-// continuing its own event loop, so serializing subprocess exits would
-// only add latency without backpressure.
+// Preserve lifecycle ordering across the subprocess bridge. In particular,
+// session-start clears stale pane metadata while session-info-changed writes
+// the restored chat name. Running both as independent fire-and-forget children
+// allowed the clear to win occasionally, leaving a resumed chat unnamed until
+// a later pi event happened to publish its metadata again.
+const runHook = (eventName, payload) =>
+  new Promise<void>((resolveDone) => {
+    try {
+      const child = spawn(HOOK_COMMAND.cmd, [...HOOK_COMMAND.prefix, eventName], {
+        stdio: ["pipe", "ignore", "ignore"],
+      });
+      let settled = false;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        resolveDone();
+      };
+      child.once("error", done);
+      child.once("close", done);
+      child.stdin.on("error", () => {});
+      child.stdin.end(JSON.stringify(payload));
+    } catch {
+      // pi should keep running even if the bridge is missing or the
+      // sidebar binary is unavailable.
+      resolveDone();
+    }
+  });
+
+let hookQueue = Promise.resolve();
 const hook = (eventName, payload) => {
-  try {
-    const child = spawn(HOOK_COMMAND.cmd, [...HOOK_COMMAND.prefix, eventName], {
-      stdio: ["pipe", "ignore", "ignore"],
-    });
-    child.on("error", () => {});
-    child.stdin.on("error", () => {});
-    child.stdin.end(JSON.stringify(payload));
-  } catch {
-    // pi should keep running even if the bridge is missing or the
-    // sidebar binary is unavailable.
-  }
+  hookQueue = hookQueue.then(() => runHook(eventName, payload), () => runHook(eventName, payload));
+  return hookQueue;
 };
 
 const getSessionId = (ctx) => {
@@ -89,9 +106,9 @@ const getSessionId = (ctx) => {
   }
 };
 
-const getSessionName = (ctx) => {
+const getSessionName = (pi, ctx) => {
   try {
-    return ctx?.sessionManager?.getSessionName?.() ?? "";
+    return pi?.getSessionName?.() ?? ctx?.sessionManager?.getSessionName?.() ?? "";
   } catch {
     return "";
   }
@@ -124,24 +141,24 @@ export default function (pi) {
   let lastAssistantText = "";
 
   pi.on("session_start", async (event, ctx) => {
-    hook("session-start", {
+    await hook("session-start", {
       cwd: ctx.cwd,
       session_id: getSessionId(ctx),
       source: mapSource(event.reason),
     });
-    hook("session-info-changed", { name: getSessionName(ctx) });
+    await hook("session-info-changed", { name: getSessionName(pi, ctx) });
   });
 
   pi.on("session_info_changed", async (event) => {
-    hook("session-info-changed", { name: event.name ?? "" });
+    await hook("session-info-changed", { name: event.name ?? "" });
   });
 
   pi.on("session_shutdown", async (event, ctx) => {
-    hook("session-end", { end_reason: event.reason ?? "" });
+    await hook("session-end", { end_reason: event.reason ?? "" });
   });
 
   pi.on("before_agent_start", async (event, ctx) => {
-    hook("user-prompt-submit", {
+    await hook("user-prompt-submit", {
       cwd: ctx.cwd,
       session_id: getSessionId(ctx),
       prompt: event.prompt ?? "",
@@ -156,7 +173,7 @@ export default function (pi) {
   });
 
   pi.on("agent_settled", async (_event, ctx) => {
-    hook("stop", {
+    await hook("stop", {
       cwd: ctx.cwd,
       session_id: getSessionId(ctx),
       last_message: lastAssistantText,
@@ -169,7 +186,7 @@ export default function (pi) {
   // result in the same payload.
   pi.on("tool_result", async (event, ctx) => {
     if (!event?.toolName) return;
-    hook("activity-log", {
+    await hook("activity-log", {
       cwd: ctx.cwd,
       session_id: getSessionId(ctx),
       tool_name: event.toolName,

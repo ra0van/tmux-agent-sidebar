@@ -121,6 +121,25 @@ fn plugin_manifest_omits_redundant_hooks_field() {
 }
 
 #[test]
+fn tmux_focus_hooks_defer_sidebar_pid_format_to_inner_tmux() {
+    let conf = fs::read_to_string("agent-sidebar.conf").expect("failed to read agent-sidebar.conf");
+
+    assert_eq!(
+        conf.matches("-F \\\"##{@sidebar_pid}\\\"").count(),
+        3,
+        "pane, window, and client-session focus hooks must query every pane's PID"
+    );
+    assert!(
+        !conf.contains("-F \\\"#{@sidebar_pid}\\\""),
+        "a single # is expanded in the selected pane's context before the inner tmux command runs"
+    );
+    assert!(
+        conf.contains("set-hook -ga client-session-changed"),
+        "switching tmux sessions must wake sidebar instances immediately"
+    );
+}
+
+#[test]
 fn plugin_manifest_version_matches_cargo_toml() {
     // Claude Code uses `plugin.json`'s `version` field for update detection
     // (`/plugin update` and the marketplace cache compare against this).

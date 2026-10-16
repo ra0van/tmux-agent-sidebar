@@ -11,7 +11,7 @@ surface is similar to OpenCode but with a different event source.
 ### Status and prompts
 
 - Live status from `session_start` / `before_agent_start` / `agent_settled`
-- Chat name from `session_info_changed`, updated immediately when `/rename` sets or clears it
+- Chat name from `session_start` and `session_info_changed`, including immediately restored names when resuming a conversation and live `/rename` updates
 - Prompt text from `before_agent_start`
 - Response preview (`▷ ...`) from the last assistant message, flushed on `agent_settled`
 - Elapsed time since the last prompt
@@ -30,7 +30,7 @@ surface is similar to OpenCode but with a different event source.
 
 | Feature                     | Why                                                                                     |
 | ---------------------------- | ---------------------------------------------------------------------------------------- |
-| Permission badge             | pi does not expose Claude-style permission modes to extensions                          |
+| Non-default permission modes | pi does not expose Claude-style permission modes to extensions; the row shows `default` |
 | Waiting status + wait reason | pi has no native permission-approval event exposed to extensions                        |
 | Background shell state       | pi's bash tool result does not currently document a background flag                      |
 | API failure reason           | pi's extension API has no dedicated "agent errored" lifecycle event distinct from `stop` |
